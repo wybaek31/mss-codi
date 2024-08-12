@@ -1,0 +1,4 @@
+rootProject.name = 'mss-codi'
+include 'mss-codi-core'
+include 'mss-codi-api'
+include 'mss-codi-admin'
