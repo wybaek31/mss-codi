@@ -57,7 +57,7 @@ public class RedisConfig {
         return RedisCacheConfiguration.defaultCacheConfig()
                 .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()))
-                .entryTtl(Duration.ofMinutes(3));
+                .entryTtl(Duration.ofMinutes(1));
     }
 
     private Map<String, RedisCacheConfiguration> cacheConfigurationMap() {

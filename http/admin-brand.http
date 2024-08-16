@@ -3,6 +3,6 @@ POST http://localhost:8081/codi/admin/brand
 Content-Type: application/json
 
 {
-  "brandName": "EEE",
-  "adminId": "admin"
+  "brandName": "MUSINSA",
+  "regUser": "admin"
 }

@@ -11,7 +11,7 @@ Content-Type: application/json
 }
 
 ### [Admin] 상품 수정 API.
-PATCH http://localhost:8081/codi/admin/product/73
+PATCH http://localhost:8081/codi/admin/product/74
 Content-Type: application/json
 
 {
@@ -22,7 +22,7 @@ Content-Type: application/json
 }
 
 ### [Admin] 상품 삭제 API.
-DELETE http://localhost:8081/codi/admin/product/73
+DELETE http://localhost:8081/codi/admin/product/74
 Content-Type: application/json
 
 {

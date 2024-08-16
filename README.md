@@ -8,11 +8,19 @@
     - 운영자는 새로운 브랜드를 등록하고, 모든 브랜드의 상품을 추가, 변경, 삭제할 수 있어야 합니다.
 
 
-- 프로젝트 구조를 core, admin, api 3개의 모듈로 나누어 구현.
+- 프로젝트 구조를 core, admin, api 3개의 모듈로 나누어 Layered Architecture 구조로 구현.
     - core : 도메인 모델 및 공통 로직 구현.
+      - domain : 도메인 모델 구현.
+      - config : DB, Redis 설정 구현.
+      - repository : JPA Repository 구현.
     - admin : 운영자 관련 API 구현.
+      - 브랜드 등록, 상품 등록, 수정, 삭제 API 구현.
     - api : 서비스 관련 API 구현.
-
+      - Controller : API 요청 및 응답 처리.
+      - Facade : 비즈니스 로직의 조합을 처리.
+        - 데이터를 조회시 1차는 캐시에서 2차는 DB에서 조회.
+        - Mapper를 활용해서 최종 결과의 오브젝트를 생성.
+      - Service : 비즈니스 로직 구현.
 
 
 ## 기술스택
