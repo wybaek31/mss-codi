@@ -31,7 +31,6 @@ public class BrandAdminService {
         // Step 1. 중복 브랜드명 조회.
         Brand existBrand = brandRepository.findByBrandName(req.getBrandName());
         if (existBrand != null) {
-            log.error("이미 등록된 브랜드명입니다. brandName: {}", req.getBrandName());
             throw new BaseException(BRAND_ALREADY_EXIST);
         }
 

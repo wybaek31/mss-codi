@@ -8,9 +8,11 @@ import com.mss.codi.core.domain.product.Product;
 import com.mss.codi.core.domain.product.ProductInfo;
 import com.mss.codi.core.enums.CategoryType;
 import com.mss.codi.core.enums.DataStatusType;
+import com.mss.codi.core.exception.BaseException;
 import com.mss.codi.core.mapper.product.ProductObjectMapper;
 import com.mss.codi.core.repository.brand.BrandRepository;
 import com.mss.codi.core.repository.product.ProductRepository;
+import com.mss.codi.core.response.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -32,11 +34,11 @@ public class ProductAdminService {
     public ProductInfo registerProduct(RegisterProductReq req) {
         // Step 1. 브랜드 체크.
         Brand brand = brandRepository.findById(req.getBrandId())
-                .orElseThrow(() -> new IllegalArgumentException("브랜드 정보가 없습니다."));
+                .orElseThrow(() -> new BaseException(ErrorCode.BRAND_NOT_FOUND));
 
         // Step 2. 상품 가격 확인.
         if (req.getPrice() < 0) {
-            throw new IllegalArgumentException("상품 가격은 0보다 커야 합니다.");
+            throw new BaseException(ErrorCode.PRODUCT_PRICE_ZERO);
         }
 
         Product product = Product.builder()
@@ -62,11 +64,11 @@ public class ProductAdminService {
     public ProductInfo updateProduct(Long productId, UpdateProductReq req) {
         // Step 1. 상품 체크.
         Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new IllegalArgumentException("상품 정보가 없습니다."));
+                .orElseThrow(() -> new BaseException(ErrorCode.PRODUCT_NOT_FOUND));
 
         // Step 2. 상품 가격 확인.
         if (req.getPrice() < 0) {
-            throw new IllegalArgumentException("상품 가격은 0보다 커야 합니다.");
+            throw new BaseException(ErrorCode.PRODUCT_PRICE_ZERO);
         }
 
         // Step 3. 상품 수정.
@@ -84,7 +86,7 @@ public class ProductAdminService {
     public String deleteProduct(Long productId, DeleteProductReq req) {
         // Step 1. 상품 체크.
         Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new IllegalArgumentException("상품 정보가 없습니다."));
+                .orElseThrow(() -> new BaseException(ErrorCode.PRODUCT_NOT_FOUND));
 
         // Step 2. 상품 삭제.
         product.deleteProduct(req.getRegUser());
