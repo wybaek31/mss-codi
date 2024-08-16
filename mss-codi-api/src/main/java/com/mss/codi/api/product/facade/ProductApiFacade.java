@@ -2,6 +2,7 @@ package com.mss.codi.api.product.facade;
 
 import com.mss.codi.api.product.controller.dto.BrandCategoryMinPricesRes;
 import com.mss.codi.api.product.controller.dto.CategoryMinPricesRes;
+import com.mss.codi.api.product.mapper.ProductApiObjectMapper;
 import com.mss.codi.api.product.service.ProductApiService;
 import com.mss.codi.api.product.service.ProductCacheApiService;
 import com.mss.codi.core.repository.product.dto.BrandCategoryPriceDto;
@@ -19,6 +20,7 @@ public class ProductApiFacade {
 
     private final ProductCacheApiService productCacheApiService;
     private final ProductApiService productApiService;
+    private final ProductApiObjectMapper productApiObjectMapper;
 
     /**
      * 카테고리별 최저가격 조회 및 총액 계산
@@ -31,7 +33,6 @@ public class ProductApiFacade {
         try {
             categoryMinPriceList = productCacheApiService.getCacheCategoryMinPrices();
         } catch (Exception e) {
-            // Cache 조회시 에러 발생.
             log.error("[Exception] getCacheCategoryMinPrices : cause = {}", e.getMessage());
         }
 
@@ -62,7 +63,6 @@ public class ProductApiFacade {
         try {
             brandCategoryMinPriceList = productCacheApiService.getCacheBrandCategoryMinPrices();
         } catch (Exception e) {
-            // Cache 조회시 에러 발생.
             log.error("[Exception] getCacheBrandCategoryMinPrices : cause = {}", e.getMessage());
         }
 
@@ -71,7 +71,7 @@ public class ProductApiFacade {
             brandCategoryMinPriceList = productApiService.getBrandCategoryMinPrices();
         }
 
-        // 브랜드별로 최저가 상품을 추적
+        // Step 3. 결과 세팅.
         Map<Long, List<BrandCategoryPriceDto>> categoryPrice = new HashMap<>();
         Map<Long, Long> brandTotalPrice = new HashMap<>();
 
@@ -93,7 +93,7 @@ public class ProductApiFacade {
 
         return BrandCategoryMinPricesRes.builder()
                 .brandName(categoryList.getFirst().getBrandName())
-                .categoryList(categoryList)
+                .categoryList(productApiObjectMapper.toBrandCategoryMinPricesInfoList(categoryList))
                 .totalPrice(totalPrice)
                 .build();
     }
