@@ -10,7 +10,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import javax.sql.DataSource;
-import java.util.Objects;
 
 @Configuration
 @RequiredArgsConstructor
@@ -23,12 +22,11 @@ public class DataSourceConfig {
 
     @Bean
     public DataSource getDataSource() {
-        DataSourceBuilder<?> dataSourceBuilder = DataSourceBuilder.create();
-        dataSourceBuilder.driverClassName(Objects.requireNonNull(env.getProperty("spring.datasource.driver-class-name"), "Driver class name is required"));
-        dataSourceBuilder.url(Objects.requireNonNull(env.getProperty("spring.datasource.url"), "URL is required"));
-        dataSourceBuilder.username(Objects.requireNonNull(env.getProperty("spring.datasource.username"), "Username is required"));
-        dataSourceBuilder.password(Objects.requireNonNull(env.getProperty("spring.datasource.password"), "Password is required"));
-        return dataSourceBuilder.build();
+        return DataSourceBuilder.create()
+                .driverClassName(env.getProperty("spring.datasource.driver-class-name"))
+                .url(env.getProperty("spring.datasource.url"))
+                .username(env.getProperty("spring.datasource.username"))
+                .password(env.getProperty("spring.datasource.password"))
+                .build();
     }
-
 }

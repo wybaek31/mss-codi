@@ -1,6 +1,5 @@
 package com.mss.codi.api.category.service;
 
-import com.mss.codi.api.category.controller.dto.ProductMinMaxPriceRes;
 import com.mss.codi.core.enums.CategoryType;
 import com.mss.codi.core.repository.product.ProductRepository;
 import com.mss.codi.core.repository.product.dto.CategoryMinPriceDto;
@@ -15,15 +14,11 @@ public class CategoryApiService {
 
     private final ProductRepository productRepository;
 
-    public ProductMinMaxPriceRes getCategoryMinMaxPrices(CategoryType categoryType) {
-//        CategoryType categoryType = CategoryType.valueOf(category);
+    public CategoryMinPriceDto getCategoryMinPrice(CategoryType categoryType) {
+        return productRepository.findCategoryTypeOrderByPriceAsc(categoryType);
+    }
 
-        CategoryMinPriceDto minProduct = productRepository.findCategoryTypeOrderByPriceAsc(categoryType);
-        CategoryMinPriceDto maxProduct = productRepository.findCategoryTypeOrderByPriceDesc(categoryType);
-
-        return ProductMinMaxPriceRes.builder()
-                .minPriceProduct(minProduct)
-                .maxPriceProduct(maxProduct)
-                .build();
+    public CategoryMinPriceDto getCategoryMaxPrice(CategoryType categoryType) {
+        return productRepository.findCategoryTypeOrderByPriceDesc(categoryType);
     }
 }

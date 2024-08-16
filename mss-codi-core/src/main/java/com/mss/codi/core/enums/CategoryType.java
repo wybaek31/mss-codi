@@ -16,4 +16,8 @@ public enum CategoryType {
     ACCESSORY("악세서리");
 
     private final String categoryName;
+
+    public String getCacheName() {
+        return name().toLowerCase();
+    }
 }
