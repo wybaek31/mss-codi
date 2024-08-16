@@ -90,7 +90,7 @@ public class ProductAdminService {
 
         // Step 2. 상품 삭제.
         product.deleteProduct(req.getRegUser());
-        productRepository.delete(product);
+        productRepository.save(product);
         return "SUCCESS";
     }
 

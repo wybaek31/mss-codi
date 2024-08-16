@@ -4,14 +4,14 @@ Content-Type: application/json
 
 {
   "productName": "TEST",
-  "brandId": 1,
+  "brandId": 15,
   "categoryType": "TOP",
   "price": 10000,
   "regUser": "admin"
 }
 
 ### [Admin] 상품 수정 API.
-PATCH http://localhost:8081/codi/admin/product/74
+PATCH http://localhost:8081/codi/admin/product/75
 Content-Type: application/json
 
 {
@@ -22,7 +22,7 @@ Content-Type: application/json
 }
 
 ### [Admin] 상품 삭제 API.
-DELETE http://localhost:8081/codi/admin/product/74
+DELETE http://localhost:8081/codi/admin/product/75
 Content-Type: application/json
 
 {

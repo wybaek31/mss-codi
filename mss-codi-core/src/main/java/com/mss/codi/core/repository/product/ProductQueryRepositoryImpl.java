@@ -1,6 +1,7 @@
 package com.mss.codi.core.repository.product;
 
 import com.mss.codi.core.enums.CategoryType;
+import com.mss.codi.core.enums.DataStatusType;
 import com.mss.codi.core.repository.product.dto.BrandCategoryPriceDto;
 import com.mss.codi.core.repository.product.dto.CategoryPriceDto;
 import com.querydsl.core.Tuple;
@@ -28,7 +29,8 @@ public class ProductQueryRepositoryImpl implements ProductQueryRepository {
                 .from(product)
                 .join(brand)
                 .on(product.brandId.eq(brand.brandId))
-                .where(product.categoryType.eq(categoryType))
+                .where(product.statusType.eq(DataStatusType.USE),
+                        product.categoryType.eq(categoryType))
                 .orderBy(product.price.asc())
                 .fetchFirst();
 
@@ -50,7 +52,8 @@ public class ProductQueryRepositoryImpl implements ProductQueryRepository {
                 .from(product)
                 .join(brand)
                 .on(product.brandId.eq(brand.brandId))
-                .where(product.categoryType.eq(categoryType))
+                .where(product.statusType.eq(DataStatusType.USE),
+                        product.categoryType.eq(categoryType))
                 .orderBy(product.price.desc())
                 .fetchFirst();
 
@@ -73,7 +76,8 @@ public class ProductQueryRepositoryImpl implements ProductQueryRepository {
                 .from(product)
                 .join(brand)
                 .on(product.brandId.eq(brand.brandId))
-                .where(product.categoryType.in(categories))
+                .where(product.statusType.eq(DataStatusType.USE),
+                        product.categoryType.in(categories))
                 .groupBy(product.brandId, product.categoryType)
                 .orderBy(product.brandId.asc())
                 .fetch();

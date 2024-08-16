@@ -5,6 +5,7 @@ import com.mss.codi.api.product.controller.dto.CategoryMinPricesRes;
 import com.mss.codi.api.product.mapper.ProductApiObjectMapper;
 import com.mss.codi.api.product.service.ProductApiService;
 import com.mss.codi.api.product.service.ProductCacheApiService;
+import com.mss.codi.core.enums.CategoryType;
 import com.mss.codi.core.repository.product.dto.BrandCategoryPriceDto;
 import com.mss.codi.core.repository.product.dto.CategoryPriceDto;
 import lombok.RequiredArgsConstructor;
@@ -58,33 +59,37 @@ public class ProductApiFacade {
      */
     public BrandCategoryMinPricesRes getFacadeBrandCategoryMinPrices() {
         List<BrandCategoryPriceDto> brandCategoryMinPriceList = null;
-
         // Step 1. Cache 조회.
         try {
             brandCategoryMinPriceList = productCacheApiService.getCacheBrandCategoryMinPrices();
         } catch (Exception e) {
             log.error("[Exception] getCacheBrandCategoryMinPrices : cause = {}", e.getMessage());
         }
-
         // Step 2. DB 조회.
         if (brandCategoryMinPriceList == null || brandCategoryMinPriceList.isEmpty()) {
             brandCategoryMinPriceList = productApiService.getBrandCategoryMinPrices();
         }
 
-        // Step 3. 결과 세팅.
+        // 조회된 리스트로 브랜드별 카테고리 데이터 정리.
         Map<Long, List<BrandCategoryPriceDto>> categoryPrice = new HashMap<>();
         Map<Long, Long> brandTotalPrice = new HashMap<>();
-
         for (BrandCategoryPriceDto brandCategoryPriceDto : brandCategoryMinPriceList) {
             Long brandId = brandCategoryPriceDto.getBrandId();
-            Long price = brandCategoryPriceDto.getPrice();
 
-            // 브랜드별 카테고리 정리.
             categoryPrice.computeIfAbsent(brandId, k -> new ArrayList<>())
                     .add(brandCategoryPriceDto);
+        }
 
-            // 브랜드별 총액 계산.
-            brandTotalPrice.put(brandId, brandTotalPrice.getOrDefault(brandId, 0L) + price);
+        // 카테고리가 갯수 확인 (전체 카테고리가 없는 브랜드 제거)
+        categoryPrice.entrySet().removeIf(entry -> entry.getValue().size() != CategoryType.values().length);
+
+        // 선택된 브랜드에 대해서만 총액 계산
+        for (Map.Entry<Long, List<BrandCategoryPriceDto>> entry : categoryPrice.entrySet()) {
+            Long brandId = entry.getKey();
+            Long totalPrice = entry.getValue().stream()
+                    .mapToLong(BrandCategoryPriceDto::getPrice)
+                    .sum();
+            brandTotalPrice.put(brandId, totalPrice);
         }
 
         Long minPriceBrandId = Collections.min(brandTotalPrice.entrySet(), Map.Entry.comparingByValue()).getKey();
