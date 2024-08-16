@@ -2,8 +2,8 @@ package com.mss.codi.api.product.service;
 
 import com.mss.codi.core.enums.CategoryType;
 import com.mss.codi.core.repository.product.ProductRepository;
-import com.mss.codi.core.repository.product.dto.BrandCategoryMinPriceDto;
-import com.mss.codi.core.repository.product.dto.CategoryMinPriceDto;
+import com.mss.codi.core.repository.product.dto.BrandCategoryPriceDto;
+import com.mss.codi.core.repository.product.dto.CategoryPriceDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,13 +22,13 @@ public class ProductApiService {
      * 카테고리별 최저가격 조회 및 총액 계산
      * @return
      */
-    public List<CategoryMinPriceDto> getCategoryMinPrices() {
-        List<CategoryMinPriceDto> categoryMinPriceList = new ArrayList<>();
+    public List<CategoryPriceDto> getCategoryMinPrices() {
+        List<CategoryPriceDto> categoryMinPriceList = new ArrayList<>();
 
         // 카테고리별 최저가격 조회.
         for (CategoryType categoryType : CategoryType.values()) {
-            CategoryMinPriceDto categoryMinPriceDto = productRepository.findCategoryTypeOrderByPriceAsc(categoryType);
-            categoryMinPriceList.add(categoryMinPriceDto);
+            CategoryPriceDto categoryPriceDto = productRepository.findCategoryTypeOrderByPriceAsc(categoryType);
+            categoryMinPriceList.add(categoryPriceDto);
         }
 
         return categoryMinPriceList;
@@ -38,7 +38,7 @@ public class ProductApiService {
      * 브랜드 카테고리별 최저가격 조회
      * @return
      */
-    public List<BrandCategoryMinPriceDto> getBrandCategoryMinPrices() {
+    public List<BrandCategoryPriceDto> getBrandCategoryMinPrices() {
         return productRepository.findBrandIdAndCategoryTypeOrderByPriceAsc(CategoryType.values());
     }
 }

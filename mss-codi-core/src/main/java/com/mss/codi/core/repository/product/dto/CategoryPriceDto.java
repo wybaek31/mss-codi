@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 @Getter
 @Builder
-public class CategoryMinPriceDto implements Serializable {
+public class CategoryPriceDto implements Serializable {
     @Serial
     private static final long serialVersionUID = -5851846800447074369L;
 

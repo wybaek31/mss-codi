@@ -1,8 +1,8 @@
 package com.mss.codi.core.repository.product;
 
 import com.mss.codi.core.enums.CategoryType;
-import com.mss.codi.core.repository.product.dto.BrandCategoryMinPriceDto;
-import com.mss.codi.core.repository.product.dto.CategoryMinPriceDto;
+import com.mss.codi.core.repository.product.dto.BrandCategoryPriceDto;
+import com.mss.codi.core.repository.product.dto.CategoryPriceDto;
 import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
@@ -22,7 +22,7 @@ public class ProductQueryRepositoryImpl implements ProductQueryRepository {
     }
 
     @Override
-    public CategoryMinPriceDto findCategoryTypeOrderByPriceAsc(CategoryType categoryType) {
+    public CategoryPriceDto findCategoryTypeOrderByPriceAsc(CategoryType categoryType) {
         // 카테고리별 최저가 상품 조회.
         Tuple result = queryFactory.select(brand.brandName, product.price)
                 .from(product)
@@ -33,7 +33,7 @@ public class ProductQueryRepositoryImpl implements ProductQueryRepository {
                 .fetchFirst();
 
         if (result != null) {
-            return CategoryMinPriceDto.builder()
+            return CategoryPriceDto.builder()
                     .categoryName(categoryType.getCategoryName())
                     .brandName(result.get(brand.brandName))
                     .price(result.get(product.price))
@@ -44,7 +44,7 @@ public class ProductQueryRepositoryImpl implements ProductQueryRepository {
     }
 
     @Override
-    public CategoryMinPriceDto findCategoryTypeOrderByPriceDesc(CategoryType categoryType) {
+    public CategoryPriceDto findCategoryTypeOrderByPriceDesc(CategoryType categoryType) {
         // 카테고리별 최저가 상품 조회.
         Tuple result = queryFactory.select(brand.brandName, product.price)
                 .from(product)
@@ -55,7 +55,7 @@ public class ProductQueryRepositoryImpl implements ProductQueryRepository {
                 .fetchFirst();
 
         if (result != null) {
-            return CategoryMinPriceDto.builder()
+            return CategoryPriceDto.builder()
                     .categoryName(categoryType.getCategoryName())
                     .brandName(result.get(brand.brandName))
                     .price(result.get(product.price))
@@ -66,7 +66,7 @@ public class ProductQueryRepositoryImpl implements ProductQueryRepository {
     }
 
     @Override
-    public List<BrandCategoryMinPriceDto> findBrandIdAndCategoryTypeOrderByPriceAsc(CategoryType[] categories) {
+    public List<BrandCategoryPriceDto> findBrandIdAndCategoryTypeOrderByPriceAsc(CategoryType[] categories) {
 
         List<Tuple> results = queryFactory
                 .select(product.brandId, brand.brandName, product.categoryType, product.price.min())
@@ -80,7 +80,7 @@ public class ProductQueryRepositoryImpl implements ProductQueryRepository {
 
         if (results != null) {
             return results.stream()
-                    .map(tuple -> BrandCategoryMinPriceDto.builder()
+                    .map(tuple -> BrandCategoryPriceDto.builder()
                             .brandId(tuple.get(product.brandId))
                             .brandName(tuple.get(brand.brandName))
                             .categoryType(tuple.get(product.categoryType))

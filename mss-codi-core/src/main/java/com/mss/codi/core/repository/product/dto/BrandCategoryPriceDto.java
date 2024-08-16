@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 @Getter
 @Builder
-public class BrandCategoryMinPriceDto implements Serializable {
+public class BrandCategoryPriceDto implements Serializable {
     @Serial
     private static final long serialVersionUID = 539074117232518214L;
     private Long brandId;

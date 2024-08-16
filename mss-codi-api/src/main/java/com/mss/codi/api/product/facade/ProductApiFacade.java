@@ -4,8 +4,8 @@ import com.mss.codi.api.product.controller.dto.BrandCategoryMinPricesRes;
 import com.mss.codi.api.product.controller.dto.CategoryMinPricesRes;
 import com.mss.codi.api.product.service.ProductApiService;
 import com.mss.codi.api.product.service.ProductCacheApiService;
-import com.mss.codi.core.repository.product.dto.BrandCategoryMinPriceDto;
-import com.mss.codi.core.repository.product.dto.CategoryMinPriceDto;
+import com.mss.codi.core.repository.product.dto.BrandCategoryPriceDto;
+import com.mss.codi.core.repository.product.dto.CategoryPriceDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,7 +25,7 @@ public class ProductApiFacade {
      * @return
      */
     public CategoryMinPricesRes getFacadeCategoryMinPrices() {
-        List<CategoryMinPriceDto> categoryMinPriceList = null;
+        List<CategoryPriceDto> categoryMinPriceList = null;
 
         // Step 1. Cache 조회.
         try {
@@ -42,7 +42,7 @@ public class ProductApiFacade {
 
         // 결과 세팅
         long totalPrice = categoryMinPriceList.stream()
-                .mapToLong(CategoryMinPriceDto::getPrice)
+                .mapToLong(CategoryPriceDto::getPrice)
                 .sum();
 
         return CategoryMinPricesRes.builder()
@@ -56,7 +56,7 @@ public class ProductApiFacade {
      * @return
      */
     public BrandCategoryMinPricesRes getFacadeBrandCategoryMinPrices() {
-        List<BrandCategoryMinPriceDto> brandCategoryMinPriceList = null;
+        List<BrandCategoryPriceDto> brandCategoryMinPriceList = null;
 
         // Step 1. Cache 조회.
         try {
@@ -72,16 +72,16 @@ public class ProductApiFacade {
         }
 
         // 브랜드별로 최저가 상품을 추적
-        Map<Long, List<BrandCategoryMinPriceDto>> categoryPrice = new HashMap<>();
+        Map<Long, List<BrandCategoryPriceDto>> categoryPrice = new HashMap<>();
         Map<Long, Long> brandTotalPrice = new HashMap<>();
 
-        for (BrandCategoryMinPriceDto brandCategoryMinPriceDto : brandCategoryMinPriceList) {
-            Long brandId = brandCategoryMinPriceDto.getBrandId();
-            Long price = brandCategoryMinPriceDto.getPrice();
+        for (BrandCategoryPriceDto brandCategoryPriceDto : brandCategoryMinPriceList) {
+            Long brandId = brandCategoryPriceDto.getBrandId();
+            Long price = brandCategoryPriceDto.getPrice();
 
             // 브랜드별 카테고리 정리.
             categoryPrice.computeIfAbsent(brandId, k -> new ArrayList<>())
-                    .add(brandCategoryMinPriceDto);
+                    .add(brandCategoryPriceDto);
 
             // 브랜드별 총액 계산.
             brandTotalPrice.put(brandId, brandTotalPrice.getOrDefault(brandId, 0L) + price);
@@ -89,7 +89,7 @@ public class ProductApiFacade {
 
         Long minPriceBrandId = Collections.min(brandTotalPrice.entrySet(), Map.Entry.comparingByValue()).getKey();
         Long totalPrice = brandTotalPrice.get(minPriceBrandId);
-        List<BrandCategoryMinPriceDto> categoryList = categoryPrice.get(minPriceBrandId);
+        List<BrandCategoryPriceDto> categoryList = categoryPrice.get(minPriceBrandId);
 
         return BrandCategoryMinPricesRes.builder()
                 .brandName(categoryList.getFirst().getBrandName())
