@@ -1,0 +1,30 @@
+### [Admin] 상품 등록 API.
+POST http://localhost:8081/codi/admin/product
+Content-Type: application/json
+
+{
+  "productName": "TEST",
+  "brandId": 1,
+  "categoryType": "TOP",
+  "price": 10000,
+  "regUser": "admin"
+}
+
+### [Admin] 상품 수정 API.
+PATCH http://localhost:8081/codi/admin/product/73
+Content-Type: application/json
+
+{
+  "productName": "TEST",
+  "categoryType": "TOP",
+  "price": 10000,
+  "regUser": "admin"
+}
+
+### [Admin] 상품 삭제 API.
+DELETE http://localhost:8081/codi/admin/product/73
+Content-Type: application/json
+
+{
+  "regUser": "admin"
+}

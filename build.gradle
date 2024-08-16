@@ -11,9 +11,6 @@ buildscript {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
         classpath "io.spring.gradle:dependency-management-plugin:${dependencyManagementVersion}"
     }
-
-    ext.profile = (!project.hasProperty('profile') || !profile) ? 'local' : profile
-    println "########## active_profile = $profile"
 }
 
 subprojects {
@@ -44,12 +41,20 @@ subprojects {
         implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
 
         runtimeOnly 'com.h2database:h2'
-        implementation 'org.redisson:redisson-spring-boot-starter:3.33.0'
+
+        // QueryDsl
+        implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+        annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
+        annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+        annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 
         annotationProcessor 'org.projectlombok:lombok'
         implementation 'org.mapstruct:mapstruct:1.5.3.Final'
         annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
         annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
+
+        // Redis
+        implementation 'com.github.codemonstur:embedded-redis:1.4.3'
 
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
         testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
@@ -57,11 +62,6 @@ subprojects {
 
     test {
         useJUnitPlatform()
-
-        testLogging {
-            events = ["passed", "failed"]
-        }
-        systemProperty "spring.profiles.active", profile
     }
 }
 

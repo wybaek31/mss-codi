@@ -1,0 +1,8 @@
+### [Admin] 브랜드 등록 API.
+POST http://localhost:8081/codi/admin/brand
+Content-Type: application/json
+
+{
+  "brandName": "EEE",
+  "adminId": "admin"
+}

@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: mss-codi-api
+
+server:
+  port: 8080
+  shutdown: graceful
+  compression:
+    enabled: true
